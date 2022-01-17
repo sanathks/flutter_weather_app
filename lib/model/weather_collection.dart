@@ -14,22 +14,22 @@ class WeatherCollection {
 
     List<dynamic> hourlyData = json['hourly'];
     List<WeatherSummaryModel> hourly = hourlyData.map((element) {
-      var dt = DateFormat.jm().format(DateTime.now());
+      var dt = DateTime.fromMillisecondsSinceEpoch(element['dt'] * 1000);
       var dtLable = "PM";
       var icon = element['weather'][0]['icon'];
       var main = element['weather'][0]['main'];
-      var temp = element['temp']['day'];
-      return WeatherSummaryModel(dt, dtLable, icon, temp, main);
+      var temp = element['temp'];
+      return WeatherSummaryModel(dt, dtLable, icon, temp.round(), main);
     }).toList();
 
     List<dynamic> weeklyData = json['daily'];
     List<WeatherSummaryModel> weekly = weeklyData.map((element) {
-      var dt = DateFormat.jm().format(DateTime.now());
+      var dt = DateTime.fromMillisecondsSinceEpoch(element['dt'] * 1000);
       var dtLable = "PM";
       var icon = element['weather'][0]['icon'];
       var main = element['weather'][0]['main'];
       var temp = element['temp']['day'];
-      return WeatherSummaryModel(dt, dtLable, icon, temp, main);
+      return WeatherSummaryModel(dt, dtLable, icon, temp.round(), main);
     }).toList();
 
     return WeatherCollection(

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:weapp/const/colors.dart';
+import 'package:weapp/model/weather_collection.dart';
+import 'package:weapp/widget/weather_icon.dart';
 
 class WeatherNowPage extends StatefulWidget {
-  const WeatherNowPage({Key? key}) : super(key: key);
+  final WeatherCollection? collection;
+  const WeatherNowPage({Key? key, required this.collection}) : super(key: key);
 
   @override
   _WeatherNowPageState createState() => _WeatherNowPageState();
@@ -21,10 +25,7 @@ class _WeatherNowPageState extends State<WeatherNowPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
-                width: 80,
-                child: Image.network('https://openweathermap.org/img/wn/10d@2x.png'),
-              ),
+             WeatherIcon(icon: widget.collection!.current.icon, size: 80,),
               Column(
                 children: [
                   Text("Today", style: GoogleFonts.roboto(
@@ -32,7 +33,7 @@ class _WeatherNowPageState extends State<WeatherNowPage> {
                       color: textColor,
                       fontWeight: FontWeight.w400
                   )),
-                  Text("Set, 3 Aug", style: GoogleFonts.roboto(
+                  Text(DateFormat("EEE, d MMM").format(DateTime.now()), style: GoogleFonts.roboto(
                       fontSize: 12,
                       color: textColor,
                       fontWeight: FontWeight.w400
@@ -44,7 +45,7 @@ class _WeatherNowPageState extends State<WeatherNowPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("28\u00B0", style: GoogleFonts.roboto(
+              Text("${widget.collection!.current.temp.toString()}\u00B0", style: GoogleFonts.roboto(
                   fontSize: 100,
                   color: textColor,
                   fontWeight: FontWeight.w200
@@ -55,7 +56,7 @@ class _WeatherNowPageState extends State<WeatherNowPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Weather Description", style: GoogleFonts.roboto(
+              Text(widget.collection!.current.description, style: GoogleFonts.roboto(
                   fontSize: 18,
                   color: Colors.white70,
                   fontWeight: FontWeight.w200
@@ -69,7 +70,7 @@ class _WeatherNowPageState extends State<WeatherNowPage> {
               children: [
                 Row(
                   children: [
-                    Text("Feel Like: 32", style: GoogleFonts.roboto(
+                    Text("Feel Like: ${widget.collection!.current.feelLike}", style: GoogleFonts.roboto(
                         fontSize: 12,
                         color: Colors.white,
                         fontWeight: FontWeight.w300
@@ -79,7 +80,7 @@ class _WeatherNowPageState extends State<WeatherNowPage> {
                         color: Colors.white,
                         fontWeight: FontWeight.w200
                     )),
-                    Text("Sunset: 20:15", style: GoogleFonts.roboto(
+                    Text("Sunset: ${DateFormat("H:m").format(widget.collection!.current.sunset)}", style: GoogleFonts.roboto(
                         fontSize: 12,
                         color: Colors.white,
                         fontWeight: FontWeight.w300
@@ -127,7 +128,7 @@ class _WeatherNowPageState extends State<WeatherNowPage> {
                                           )),
                                           Padding(
                                             padding: const EdgeInsets.all(2),
-                                            child: Text("20:15", style: GoogleFonts.roboto(
+                                            child: Text(DateFormat("H:m").format(widget.collection!.current.sunrise), style: GoogleFonts.roboto(
                                                 fontSize: 14,
                                                 color: textColor,
                                                 fontWeight: FontWeight.w300
@@ -145,7 +146,7 @@ class _WeatherNowPageState extends State<WeatherNowPage> {
                                           )),
                                           Padding(
                                             padding: const EdgeInsets.all(2),
-                                            child: Text("20:15", style: GoogleFonts.roboto(
+                                            child: Text(DateFormat("H:m").format(widget.collection!.current.sunset), style: GoogleFonts.roboto(
                                                 fontSize: 14,
                                                 color: textColor,
                                                 fontWeight: FontWeight.w300
@@ -167,7 +168,7 @@ class _WeatherNowPageState extends State<WeatherNowPage> {
                                           )),
                                           Padding(
                                             padding: const EdgeInsets.all(2),
-                                            child: Text("1013", style: GoogleFonts.roboto(
+                                            child: Text(widget.collection!.current.pressure.toString(), style: GoogleFonts.roboto(
                                                 fontSize: 14,
                                                 color: textColor,
                                                 fontWeight: FontWeight.w300
@@ -185,7 +186,7 @@ class _WeatherNowPageState extends State<WeatherNowPage> {
                                           )),
                                           Padding(
                                             padding: const EdgeInsets.all(2),
-                                            child: Text("64", style: GoogleFonts.roboto(
+                                            child: Text(widget.collection!.current.humidity.toString(), style: GoogleFonts.roboto(
                                                 fontSize: 14,
                                                 color: textColor,
                                                 fontWeight: FontWeight.w300
@@ -207,7 +208,7 @@ class _WeatherNowPageState extends State<WeatherNowPage> {
                                           )),
                                           Padding(
                                             padding: const EdgeInsets.all(2),
-                                            child: Text("293.85", style: GoogleFonts.roboto(
+                                            child: Text(widget.collection!.current.dewPoint.toString(), style: GoogleFonts.roboto(
                                                 fontSize: 14,
                                                 color: textColor,
                                                 fontWeight: FontWeight.w300
@@ -225,7 +226,7 @@ class _WeatherNowPageState extends State<WeatherNowPage> {
                                           )),
                                           Padding(
                                             padding: const EdgeInsets.all(2),
-                                            child: Text("8.75", style: GoogleFonts.roboto(
+                                            child: Text(widget.collection!.current.uvi.toString(), style: GoogleFonts.roboto(
                                                 fontSize: 14,
                                                 color: textColor,
                                                 fontWeight: FontWeight.w300
@@ -247,7 +248,7 @@ class _WeatherNowPageState extends State<WeatherNowPage> {
                                           )),
                                           Padding(
                                             padding: const EdgeInsets.all(2),
-                                            child: Text("90", style: GoogleFonts.roboto(
+                                            child: Text(widget.collection!.current.clouds.toString(), style: GoogleFonts.roboto(
                                                 fontSize: 14,
                                                 color: textColor,
                                                 fontWeight: FontWeight.w300
@@ -265,7 +266,7 @@ class _WeatherNowPageState extends State<WeatherNowPage> {
                                           )),
                                           Padding(
                                             padding: const EdgeInsets.all(2),
-                                            child: Text("10000", style: GoogleFonts.roboto(
+                                            child: Text(widget.collection!.current.visibility.toString(), style: GoogleFonts.roboto(
                                                 fontSize: 14,
                                                 color: textColor,
                                                 fontWeight: FontWeight.w300
@@ -287,7 +288,7 @@ class _WeatherNowPageState extends State<WeatherNowPage> {
                                           )),
                                           Padding(
                                             padding: const EdgeInsets.all(2),
-                                            child: Text("2.41", style: GoogleFonts.roboto(
+                                            child: Text(widget.collection!.current.windSpeed.toString(), style: GoogleFonts.roboto(
                                                 fontSize: 14,
                                                 color: textColor,
                                                 fontWeight: FontWeight.w300
@@ -305,7 +306,7 @@ class _WeatherNowPageState extends State<WeatherNowPage> {
                                           )),
                                           Padding(
                                             padding: const EdgeInsets.all(2),
-                                            child: Text("26", style: GoogleFonts.roboto(
+                                            child: Text(widget.collection!.current.windDeg.toString(), style: GoogleFonts.roboto(
                                                 fontSize: 14,
                                                 color: textColor,
                                                 fontWeight: FontWeight.w300

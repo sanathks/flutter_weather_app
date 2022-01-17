@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:weapp/const/colors.dart';
+import 'package:weapp/model/weather_collection.dart';
+import 'package:weapp/model/weather_provider.dart';
 import 'package:weapp/page/weather_hourly_page.dart';
 import 'package:weapp/page/weather_next_days_page.dart';
 import 'package:weapp/page/weather_now_page.dart';
@@ -44,7 +47,22 @@ class _DetailsPageState extends State<DetailsPage> {
           ],
 
         ),
-        body: renderContent(),
+        body: Consumer<WeatherProvider> (
+          builder: (context, weather, child)  {
+           return  FutureBuilder<WeatherCollection>(
+           future: weather.fetch(),
+             builder: (BuildContext context, AsyncSnapshot<WeatherCollection> snapshot) {
+                  if (!snapshot.hasData) {
+                    return Container(
+                      color: primaryColor,
+                    );
+                  }
+
+                return renderContent(snapshot.data);
+              }
+            );
+           },
+        ),
         bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: onTab,
@@ -72,15 +90,15 @@ class _DetailsPageState extends State<DetailsPage> {
     );
   }
 
-  Widget renderContent() {
+  Widget renderContent(WeatherCollection? collection) {
     if (_selectedIndex == 1 ) {
-      return WeatherHourlyPage();
+      return WeatherHourlyPage(collection: collection,);
     }
 
     if (_selectedIndex == 2 ) {
-      return WeatherNextDaysPage();
+      return WeatherNextDaysPage(collection: collection);
     }
 
-    return const WeatherNowPage();
+    return WeatherNowPage(collection: collection,);
   }
 }
